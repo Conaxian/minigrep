@@ -41,20 +41,42 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     matching
 }
 
+pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    vec![]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn one_result() {
+    fn case_sensitive() {
         let query = "grep";
         let contents = "\
 minigrep
 A tiny version of grep built in Rust.
 
-This tool was built only for education purposes using The Rust Book.";
+This tool was built only for education purposes using The Rust Book.
+
+The word \"Grep\" shouldn't match, because the search is case-sensitive.";
         let expected = vec!["minigrep", "A tiny version of grep built in Rust."];
 
         assert_eq!(expected, search(query, contents));
+    }
+
+    #[test]
+    fn case_insensitive() {
+        let query = "rUsT";
+        let contents = "\
+minigrep
+A tiny version of grep built in Rust.
+
+This tool was built only for education purposes using The Rust Book.";
+        let expected = vec![
+            "A tiny version of grep built in Rust.",
+            "This tool was built only for education purposes using The Rust Book.",
+        ];
+
+        assert_eq!(expected, search_case_insensitive(query, contents));
     }
 }

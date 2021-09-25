@@ -26,7 +26,15 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    vec![]
+    let mut matching = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            matching.push(line);
+        }
+    }
+
+    matching
 }
 
 #[cfg(test)]
@@ -43,6 +51,6 @@ A tiny version of grep built in Rust.
 This tool was built only for education purposes using The Rust Book.";
         let expected = vec!["minigrep", "A tiny version of grep built in Rust."];
 
-        assert_eq!(expected,  search(query, contents));
+        assert_eq!(expected, search(query, contents));
     }
 }

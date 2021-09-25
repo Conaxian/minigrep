@@ -1,4 +1,5 @@
 use std::env;
+use std::error::Error;
 use std::fs;
 use std::process;
 
@@ -16,11 +17,12 @@ fn main() {
     run(config);
 }
 
-fn run(config: Config) {
-    let contents =
-        fs::read_to_string(config.filename).expect("Something went wrong reading the file");
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.filename)?;
 
     println!("With text:\n{}", contents);
+
+    Ok(())
 }
 
 struct Config {
@@ -31,7 +33,7 @@ struct Config {
 impl Config {
     fn new(args: &[String]) -> Result<Self, &str> {
         if args.len() < 3 {
-            return Err("Not enough arguments");
+            return Err("not enough arguments");
         }
 
         let query = args[1].clone();

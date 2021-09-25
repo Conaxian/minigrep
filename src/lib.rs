@@ -22,7 +22,21 @@ impl Config {
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
 
-    println!("With text:\n{}", contents);
-
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn one_result() {
+        let query = "grep";
+        let contents = "\
+minigrep
+A tiny version of grep built in Rust.
+
+This tool was built only for education purposes using The Rust Book.";
+        let expected = vec!["minigrep", "A tiny version of grep built in Rust."];
+
+        assert_eq!(expected, search(query, contents));
+    }
 }
